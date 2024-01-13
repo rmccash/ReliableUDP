@@ -8,8 +8,11 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <cstdio>
 
 #include "Net.h"
+
+#pragma warning(disable:4996)
 
 //#define SHOW_ACKS
 
@@ -169,6 +172,10 @@ int main(int argc, char* argv[])
 
 	FlowControl flowControl;
 
+	int packetCounter = 0;
+	const int MaxStringLength = PacketSize - 1;
+	char formattedString[MaxStringLength];
+
 	while (true)
 	{
 		// update flow control
@@ -207,6 +214,12 @@ int main(int argc, char* argv[])
 		{
 			unsigned char packet[PacketSize];
 			memset(packet, 0, sizeof(packet));
+
+			packetCounter++;
+			snprintf(formattedString, MaxStringLength, "Hello World %d", packetCounter);
+
+			strcpy(reinterpret_cast<char*>(packet), formattedString);
+
 			connection.SendPacket(packet, sizeof(packet));
 			sendAccumulator -= 1.0f / sendRate;
 		}
@@ -217,6 +230,8 @@ int main(int argc, char* argv[])
 			int bytes_read = connection.ReceivePacket(packet, sizeof(packet));
 			if (bytes_read == 0)
 				break;
+
+			printf("Received packet: %s\n", packet);
 		}
 
 		// show packets that were acked this frame
