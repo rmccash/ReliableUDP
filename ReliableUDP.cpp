@@ -132,14 +132,22 @@ int main(int argc, char* argv[])
 	Mode mode = Server;
 	Address address;
 
+	//Additional Command Line Arguments:
+	//This is where the additional command line arguments can be added and parsed.
+	//Something like specifing the files to send or recieve from would be added here.
+
 	if (argc >= 2)
 	{
 		int a, b, c, d;
-#pragma warning(suppress : 4996)
+		#pragma warning(suppress : 4996)
 		if (sscanf(argv[1], "%d.%d.%d.%d", &a, &b, &c, &d))
 		{
 			mode = Client;
 			address = Address(a, b, c, d, ServerPort);
+
+			//Client Task:
+			//Retrieving File from disk
+			//Code should be added here to read the file from the disk.
 		}
 	}
 
@@ -215,12 +223,27 @@ int main(int argc, char* argv[])
 			unsigned char packet[PacketSize];
 			memset(packet, 0, sizeof(packet));
 
+			//Client Task:
+			//Sending File metadata
+			//Code should be added here to send metadata about the file before sending its pieces.
+			//This could include information like file size, file name, etc.
+
+			//Client Task:
+			//Breaking the file into pieces to send
+			//Code should be added here to read a portion of the file and put it in a packet.
+			//The size of each piece and the total number of pieces should be considered.
+
 			packetCounter++;
 			snprintf(formattedString, MaxStringLength, "Hello World %d", packetCounter);
 
 			strcpy(reinterpret_cast<char*>(packet), formattedString);
 
 			connection.SendPacket(packet, sizeof(packet));
+
+			//Client Task:
+			//Sending the pieces
+			//Code should be added here to send the packet conataining a portion of the file.
+
 			sendAccumulator -= 1.0f / sendRate;
 		}
 
@@ -230,8 +253,25 @@ int main(int argc, char* argv[])
 			int bytes_read = connection.ReceivePacket(packet, sizeof(packet));
 			if (bytes_read == 0)
 				break;
+			
+			//Server Task: 
+			//Receiving file metadata
+			//Code should be added here to parse the received packet as metadata.
+			//Extract information about the file before receiving its pieces.
+			//Extracted information can be used to set up the receiving environment for file pieces.
+
+			//Server Task:
+			//Recieving the file pieces
+			//Code should be added here to process the received packet pieces.
+			//Write the pieces out to the disk or perform other required operations.
 
 			printf("Received packet: %s\n", packet);
+
+			//Server Task:
+			//Writing the pieces out to disk
+			//Code should be added here to write the recieved packet pieces to disk
+			//If all pieces are received and the file is complete, perform finalization steps.
+			//This could include checking file integrity, notifying the user, etc.
 		}
 
 		// show packets that were acked this frame
@@ -267,6 +307,11 @@ int main(int argc, char* argv[])
 
 			float sent_bandwidth = connection.GetReliabilitySystem().GetSentBandwidth();
 			float acked_bandwidth = connection.GetReliabilitySystem().GetAckedBandwidth();
+
+			// Server Task: 
+			// Verifying the file integrity
+			// Code should be added here to verify the integrity of the received file.
+			// Check if all pieces have been received and are in the correct order.
 
 			printf("rtt %.1fms, sent %d, acked %d, lost %d (%.1f%%), sent bandwidth = %.1fkbps, acked bandwidth = %.1fkbps\n",
 				rtt * 1000.0f, sent_packets, acked_packets, lost_packets,
