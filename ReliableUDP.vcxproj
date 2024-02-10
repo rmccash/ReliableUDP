@@ -127,13 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="FileStorage.cpp" />
     <ClCompile Include="FileTransfer.cpp" />
     <ClCompile Include="FileVerification.cpp" />
     <ClCompile Include="ReliableUDP.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileStorage.h" />
     <ClInclude Include="FileTransfer.h" />
     <ClInclude Include="FileVerification.h" />
     <ClInclude Include="Net.h" />

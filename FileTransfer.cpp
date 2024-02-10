@@ -1,16 +1,15 @@
 
 #include "FileTransfer.h"
+#include "Net.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
 using namespace std;
 
-FileTransfer::FileTransfer()
-{ // <- error here
-    // seems that intantiating a class for access to methods needs
-    // to be done in the constructor, except anything i try it doesnt work
-    filename = "";
+FileTransfer::FileTransfer(string filename) : net::ReliableConnection(protocolId, timeout)
+{ 
+    this->filename = filename;
 }
 
 FileTransfer::~FileTransfer()
@@ -35,17 +34,13 @@ void FileTransfer::SendFile(const char* filename, const char* address, int port)
     // Read each byte and send it to the client
     while (!file.eof())
     {
-        /* Reference:
-        line 53: const int PacketSizeHack = 256 + 128;
-        */
-
         // Reads up to the packetsizehack from earlier labs, and then sends that
         file.read(buffer, PacketSizeHack);
         int bytesRead = file.gcount();
         if (bytesRead > 0)
         {
             // Send the packet
-            connection_.SendPacket((unsigned char*)buffer, bytesRead);
+            SendPacket((unsigned char*)buffer, bytesRead);
         }
     }
 

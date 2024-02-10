@@ -16,18 +16,24 @@
 #include <algorithm>
 #include <functional>
 
-class FileTransfer
+#include "Net.h"
+
+class FileTransfer : protected net::ReliableConnection
 {
 private:
 
 	string filename;
 
 	static const int PacketSizeHack = 256 + 128;
+	const int protocolId = 0x11223344;
+	const float timeout = 10.0f;
 
 public:
 
-	void SendFile(const char* filename, const char* address, int port);
+	FileTransfer(string filename);
+	~FileTransfer();
 
+	void SendFile(const char* filename, const char* address, int port);
 	void ReceiveFile(const char* filename, int port);
 };
 
