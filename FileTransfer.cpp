@@ -1,3 +1,12 @@
+
+//Filename:		FileTransfer.cpp
+//Assignment:	A-01
+//Author:		Rhys McCash & Andrew Babos
+//Student #:	8825169 & 8822549
+//Date:			2/7/2024
+//Description:	Contains the function prototypes for the functions in FileVerification.cpp
+
+
 #include "FileTransfer.h"
 #include "Net.h"
 #include <iostream>
@@ -6,9 +15,10 @@
 
 using namespace std;
 
-FileTransfer::FileTransfer(string filename) : net::ReliableConnection(protocolId, timeout)
+
+FileTransfer::FileTransfer(const char* filename) : net::ReliableConnection(protocolId, timeout)
 {
-    this->filename = filename;
+    //this->filename = filename;
 }
 
 FileTransfer::~FileTransfer()
@@ -16,7 +26,12 @@ FileTransfer::~FileTransfer()
     cout << "FileTransfer destroyed" << endl;
 }
 
-void FileTransfer::SendFile(const char* filename, const char* address, int port)
+void FileTransfer::SetFileName(string filename)
+{
+	//this->filename = filename;
+}
+
+void FileTransfer::SendFile(const char* filename)
 {
     // open binary file
     ifstream file(filename, ios::binary);
@@ -28,7 +43,7 @@ void FileTransfer::SendFile(const char* filename, const char* address, int port)
         return;
     }
 
-    char packet[PacketSizeHack]; // temp holder
+    char packet[PacketSizeHack]; // packet we're sending
 
     // Read each byte and send it to the client
     while (!file.eof())
@@ -46,29 +61,30 @@ void FileTransfer::SendFile(const char* filename, const char* address, int port)
     file.close();
 }
 
-void FileTransfer::ReceiveFile(const char* filename, int port)
+void FileTransfer::ReceiveFile(const char* filename)
 {
 	// create holder
-	ofstream file(filename, ios::binary);
+	//ofstream file(filename, ios::binary);
 
-	// if no file was found
-	if (!file)
-	{
-		cerr << "Error opening file" << endl;
-		return;
-	}
+	//// if no file was found
+	//if (!file)
+	//{
+	//	cerr << "Error opening file" << endl;
+	//	return;
+	//}
 
-	char buffer[PacketSizeHack]; // temp holder
+	unsigned char packet[PacketSizeHack]; // temp holder
 
 	// Read each byte and send it to the client
 	while (true)
 	{
 		// Receive the packet
-		int bytesRead = ReceivePacket((unsigned char*)buffer, PacketSizeHack);
+		int bytesRead = ReceivePacket(packet, PacketSizeHack);
 		if (bytesRead > 0)
 		{
 			// Write the packet to the file
-			file.write(buffer, bytesRead);
+			//file.write(packet, bytesRead);
+			printf("%d", bytesRead);
 		}
 		else
 		{
@@ -76,6 +92,6 @@ void FileTransfer::ReceiveFile(const char* filename, int port)
 		}
 	}
 
-	file.close();
+	//file.close();
 
 }

@@ -1,3 +1,9 @@
+//Filename:		FileTransfer.h
+//Assignment:	A-01
+//Author:		Rhys McCash & Andrew Babos
+//Student #:	8825169 & 8822549
+//Date:			2/7/2024
+//Description:	Contains the function prototypes for the functions in FileTransfer.cpp
 
 #pragma once
 
@@ -17,12 +23,13 @@
 #include <functional>
 
 #include "Net.h"
+using namespace std;
 
 class FileTransfer : protected net::ReliableConnection
 {
 private:
 
-	string filename;
+	//string filename;
 
 	static const int PacketSizeHack = 256 + 128;
 	const int protocolId = 0x11223344;
@@ -30,11 +37,12 @@ private:
 
 public:
 
-	FileTransfer(string filename);
+	FileTransfer(const char* filename);
 	~FileTransfer();
 
-	void SendFile(const char* filename, const char* address, int port);
-	void ReceiveFile(const char* filename, int port);
+	void SetFileName(string filename);
+	void SendFile(const char* filename);
+	void ReceiveFile(const char* filename);
 };
 
 #endif

@@ -1,3 +1,11 @@
+//Filename:		Reliable.cpp
+//Assignment:	A-01
+//Author:		Rhys McCash & Andrew Babos
+//Student #:	8825169 & 8822549
+//Date:			2/7/2024
+//Description:	Contains the function prototypes for the functions in FileVerification.cpp
+
+
 /*
 	Reliability and Flow Control Example
 	From "Networking for Game Programmers" - http://www.gaffer.org/networking-for-game-programmers
@@ -11,6 +19,7 @@
 #include <cstdio>
 
 #include "Net.h"
+#include "FileTransfer.h"
 
 #pragma warning(disable:4996)
 
@@ -132,6 +141,8 @@ int main(int argc, char* argv[])
 	Mode mode = Server;
 	Address address;
 
+	//FileTransfer fileTransfer(argv[3]);
+
 	//Additional Command Line Arguments:
 	//This is where the additional command line arguments can be added and parsed.
 	//Something like specifing the files to send or recieve from would be added here.
@@ -149,7 +160,10 @@ int main(int argc, char* argv[])
 			//Retrieving File from disk
 			//Code should be added here to read the file from the disk.
 		}
+		printf("%s", argv[2]);
 	}
+	
+	
 
 	// initialize
 
@@ -220,53 +234,90 @@ int main(int argc, char* argv[])
 
 		while (sendAccumulator > 1.0f / sendRate)
 		{
-			unsigned char packet[PacketSize];
+			// New code here
+			//fileTransfer.SendFile(argv[3]);
+
+			ifstream file(argv[2], ios::binary);
+			unsigned char packet[PacketSizeHack];
 			memset(packet, 0, sizeof(packet));
 
-			//Client Task:
-			//Sending File metadata
-			//Code should be added here to send metadata about the file before sending its pieces.
-			//This could include information like file size, file name, etc.
+			while (!file.eof())
+			{
+				// Reads up to the packetsizehack from earlier labs, and then sends that
+				file.read(reinterpret_cast<char*>(packet), PacketSizeHack);
+				int bytesRead = file.gcount();
+				if (bytesRead > 0)
+				{
+					// Send the packet (data in binary)
+					connection.SendPacket((unsigned char*)packet, bytesRead);
+				}
+			}
 
-			//Client Task:
-			//Breaking the file into pieces to send
-			//Code should be added here to read a portion of the file and put it in a packet.
-			//The size of each piece and the total number of pieces should be considered.
+			// old code below
+			
+			//unsigned char packet[PacketSize];
+			//memset(packet, 0, sizeof(packet));
 
-			packetCounter++;
-			snprintf(formattedString, MaxStringLength, "Hello World %d", packetCounter);
+			////Client Task:
+			////Sending File metadata
+			////Code should be added here to send metadata about the file before sending its pieces.
+			////This could include information like file size, file name, etc.
 
-			strcpy(reinterpret_cast<char*>(packet), formattedString);
+			////Client Task:
+			////Breaking the file into pieces to send
+			////Code should be added here to read a portion of the file and put it in a packet.
+			////The size of each piece and the total number of pieces should be considered.
 
-			connection.SendPacket(packet, sizeof(packet));
+			//packetCounter++;
+			//snprintf(formattedString, MaxStringLength, "Hello World %d", packetCounter);
+
+			//strcpy(reinterpret_cast<char*>(packet), formattedString);
+
+			//connection.SendPacket(packet, sizeof(packet));
 
 			//Client Task:
 			//Sending the pieces
 			//Code should be added here to send the packet conataining a portion of the file.
-
+			
 			sendAccumulator -= 1.0f / sendRate;
 		}
 
 		while (true)
 		{
+
+			// New code here
+			//fileTransfer.ReceiveFile("hello br.bin");
+			ofstream file("hello br.bin", ios::binary);
+			unsigned char packet[PacketSizeHack]; // temp holder
+
+			while (true)
+			{
+				// Receive the packet
+				int bytesRead = connection.ReceivePacket(packet, PacketSizeHack);
+				//printf("%d", bytesRead);
+				if (bytesRead > 0)
+				{
+					// Write the packet to the file
+					//file.write(packet, bytesRead);
+					printf("%d", bytesRead);
+					file.write(reinterpret_cast<const char*>(packet), bytesRead);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+
+			// old code below
+			/*
 			unsigned char packet[256];
 			int bytes_read = connection.ReceivePacket(packet, sizeof(packet));
 			if (bytes_read == 0)
 				break;
+
+			printf("Received packet: %s\n", packet);*/
 			
-			//Server Task: 
-			//Receiving file metadata
-			//Code should be added here to parse the received packet as metadata.
-			//Extract information about the file before receiving its pieces.
-			//Extracted information can be used to set up the receiving environment for file pieces.
-
-			//Server Task:
-			//Recieving the file pieces
-			//Code should be added here to process the received packet pieces.
-			//Write the pieces out to the disk or perform other required operations.
-
-			printf("Received packet: %s\n", packet);
-
 			//Server Task:
 			//Writing the pieces out to disk
 			//Code should be added here to write the recieved packet pieces to disk
