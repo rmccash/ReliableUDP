@@ -26,6 +26,11 @@
 #include "Net.h"
 using namespace std;
 
+/*
+* CLASS : FileTransfer : protected net::ReliableConnection
+* DESCRIPTION: Provides an object for sending and recieving
+*				packets fromt he ReliableCnnection
+*/
 class FileTransfer : protected net::ReliableConnection
 {
 private:
@@ -36,6 +41,7 @@ private:
 	const int protocolId = 0x11223344;
 	const float timeout = 10.0f;
 
+	// info on data speed and transfer time
 	chrono::high_resolution_clock::time_point startTime;
 	chrono::high_resolution_clock::time_point endTime;
 	size_t totalBytesTransferred;
