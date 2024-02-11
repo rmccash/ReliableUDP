@@ -16,6 +16,13 @@
 using namespace std;
 
 
+/*
+* FUNCTION : FileTransfer(const char* filename) : net::ReliableConnection(protocolId, timeout)
+* DESCRIPTION: Constructor for FileTransfer class. Ability to access methods
+*				that assist with file unpack to view or file transfer
+* Parameters: const char* filename
+* Returns: none
+*/
 FileTransfer::FileTransfer(const char* filename) : net::ReliableConnection(protocolId, timeout)
 {
     //this->filename = filename;
@@ -28,11 +35,21 @@ FileTransfer::~FileTransfer()
     cout << "FileTransfer destroyed" << endl;
 }
 
-void FileTransfer::SetFileName(string filename)
-{
-	//this->filename = filename;
-}
+//
+//void FileTransfer::SetFileName(string filename)
+//{
+//	//this->filename = filename;
+//}
 
+
+/*
+* FUNCTION : SendFile()
+* DESCRIPTION: Server side method, when the client and server
+*				connect, the server reads through the file adn sends the data
+*				through packets
+* Parameters: const char* filename
+* Returns: none
+*/
 void FileTransfer::SendFile(const char* filename)
 {
     // open binary file
@@ -69,10 +86,19 @@ void FileTransfer::SendFile(const char* filename)
     file.close();
 }
 
+
+/*
+* FUNCTION : ReceiveFile()
+* DESCRIPTION: Client side method. This is used when the server and client connect
+*				After reading to the PacketSizeHack limit, it then sends that
+*				packet to the client for reassmble
+* Parameters: const char* filename
+* Returns: none
+*/
 void FileTransfer::ReceiveFile(const char* filename)
 {
 	// create holder
-	//ofstream file(filename, ios::binary);
+	ofstream file(filename, ios::binary);
 
 	//// if no file was found
 	//if (!file)
@@ -110,6 +136,14 @@ void FileTransfer::ReceiveFile(const char* filename)
 	file.close();
 }
 
+
+/*
+* FUNCTION : DisplayTransferSpeed()
+* DESCRIPTION: Calculates the transfer time as well as the
+*				Megabits/second travel speed
+* Parameters: none
+* Returns: none
+*/
 void FileTransfer::DisplayTransferSpeed()
 {
 	chrono::duration<double> duration = endTime - startTime;

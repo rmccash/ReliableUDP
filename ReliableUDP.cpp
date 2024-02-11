@@ -237,7 +237,7 @@ int main(int argc, char* argv[])
 			// New code here
 			//fileTransfer.SendFile(argv[3]);
 
-			ifstream file(argv[2], ios::binary);
+			ifstream file("hello.bin", ios::binary);
 			unsigned char packet[PacketSizeHack];
 			memset(packet, 0, sizeof(packet));
 
@@ -250,6 +250,7 @@ int main(int argc, char* argv[])
 				{
 					// Send the packet (data in binary)
 					connection.SendPacket((unsigned char*)packet, bytesRead);
+					printf("Packet: %d\n", bytesRead);
 				}
 			}
 
@@ -268,12 +269,12 @@ int main(int argc, char* argv[])
 			////Code should be added here to read a portion of the file and put it in a packet.
 			////The size of each piece and the total number of pieces should be considered.
 
-			//packetCounter++;
-			//snprintf(formattedString, MaxStringLength, "Hello World %d", packetCounter);
+			packetCounter++;
+			snprintf(formattedString, MaxStringLength, "Hello World %d", packetCounter);
 
-			//strcpy(reinterpret_cast<char*>(packet), formattedString);
+			strcpy(reinterpret_cast<char*>(packet), formattedString);
 
-			//connection.SendPacket(packet, sizeof(packet));
+			connection.SendPacket(packet, sizeof(packet));
 
 			//Client Task:
 			//Sending the pieces
@@ -286,7 +287,7 @@ int main(int argc, char* argv[])
 		{
 
 			// New code here
-			//fileTransfer.ReceiveFile("hello br.bin");
+			//fileTransfer.ReceiveFile("hello.bin");
 			ofstream file("hello br.bin", ios::binary);
 			unsigned char packet[PacketSizeHack]; // temp holder
 
@@ -299,7 +300,7 @@ int main(int argc, char* argv[])
 				{
 					// Write the packet to the file
 					//file.write(packet, bytesRead);
-					printf("%d", bytesRead);
+					printf("Recieved : %d\n", bytesRead);
 					file.write(reinterpret_cast<const char*>(packet), bytesRead);
 				}
 				else

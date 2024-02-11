@@ -21,6 +21,7 @@
 #include <list>
 #include <algorithm>
 #include <functional>
+#include <chrono>
 
 #include "Net.h"
 using namespace std;
@@ -29,20 +30,26 @@ class FileTransfer : protected net::ReliableConnection
 {
 private:
 
-	//string filename;
+	string filename;
 
 	static const int PacketSizeHack = 256 + 128;
 	const int protocolId = 0x11223344;
 	const float timeout = 10.0f;
+
+	chrono::high_resolution_clock::time_point startTime;
+	chrono::high_resolution_clock::time_point endTime;
+	size_t totalBytesTransferred;
 
 public:
 
 	FileTransfer(const char* filename);
 	~FileTransfer();
 
-	void SetFileName(string filename);
+	//void SetFileName(string filename);
 	void SendFile(const char* filename);
 	void ReceiveFile(const char* filename);
+
+	void DisplayTransferSpeed();
 };
 
 #endif
