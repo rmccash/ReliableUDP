@@ -1,4 +1,40 @@
-﻿  ReliableUDP.cpp
+﻿  FileTransfer.cpp
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\Net.h(191,21): warning C4244: '=': conversion from 'SOCKET' to 'int', possible loss of data
+  (compiling source file 'FileTransfer.cpp')
+  
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\Net.h(911,29): warning C4244: '/=': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'FileTransfer.cpp')
+  
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\Net.h(912,30): warning C4244: '/=': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'FileTransfer.cpp')
+  
+  FileVerification.cpp
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.h(25,9): error C3646: 'filename': unknown override specifier
+  (compiling source file 'FileTransfer.cpp')
+  
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.h(25,17): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'FileTransfer.cpp')
+  
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.h(33,15): error C2061: syntax error: identifier 'string'
+  (compiling source file 'FileTransfer.cpp')
+  
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.cpp(9,15): error C2511: 'FileTransfer::FileTransfer(std::string)': overloaded member function not found in 'FileTransfer'
+  C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.h(21,7):
+  see declaration of 'FileTransfer'
+  
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.cpp(9,71): error C2597: illegal reference to non-static member 'FileTransfer::protocolId'
+  C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.h(28,12):
+  see declaration of 'FileTransfer::protocolId'
+  
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.cpp(9,83): error C2597: illegal reference to non-static member 'FileTransfer::timeout'
+  C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.h(29,14):
+  see declaration of 'FileTransfer::timeout'
+  
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.cpp(10,1): error C2550: 'FileTransfer::{ctor}': constructor initializer lists are only allowed on constructor definitions
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.cpp(11,5): error C2671: 'FileTransfer::{ctor}': static member functions do not have 'this' pointers
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileTransfer.cpp(38,23): warning C4244: 'initializing': conversion from 'std::streamsize' to 'int', possible loss of data
+C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\FileVerification.cpp(18,1): error C1075: '{': no matching token found
+  ReliableUDP.cpp
 C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\Net.h(191,21): warning C4244: '=': conversion from 'SOCKET' to 'int', possible loss of data
   (compiling source file 'ReliableUDP.cpp')
   
@@ -8,4 +44,4 @@ C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\Net.h(911,29): warning C4244
 C:\Users\rhysw\source\repos\ReliableUDP\ReliableUDP\Net.h(912,30): warning C4244: '/=': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'ReliableUDP.cpp')
   
-  ReliableUDP.vcxproj -> C:\Users\rhysw\source\repos\ReliableUDP\x64\Debug\ReliableUDP.exe
+  Generating Code...
