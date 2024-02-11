@@ -19,6 +19,8 @@ using namespace std;
 FileTransfer::FileTransfer(const char* filename) : net::ReliableConnection(protocolId, timeout)
 {
     //this->filename = filename;
+    this->filename = filename;
+	totalBytesTransferred = 0;
 }
 
 FileTransfer::~FileTransfer()
@@ -45,6 +47,8 @@ void FileTransfer::SendFile(const char* filename)
 
     char packet[PacketSizeHack]; // packet we're sending
 
+	startTime = chrono::high_resolution_clock::now();
+
     // Read each byte and send it to the client
     while (!file.eof())
     {
@@ -56,7 +60,11 @@ void FileTransfer::SendFile(const char* filename)
             // Send the packet (data in binary)
             SendPacket((unsigned char*)packet, bytesRead);
         }
+
+		totalBytesTransferred += bytesRead;
     }
+
+	endTime = chrono::high_resolution_clock::now();
 
     file.close();
 }
@@ -75,6 +83,8 @@ void FileTransfer::ReceiveFile(const char* filename)
 
 	unsigned char packet[PacketSizeHack]; // temp holder
 
+	startTime = chrono::high_resolution_clock::now();
+
 	// Read each byte and send it to the client
 	while (true)
 	{
@@ -90,8 +100,23 @@ void FileTransfer::ReceiveFile(const char* filename)
 		{
 			break;
 		}
+
+		totalBytesTransferred += bytesRead;
 	}
 
 	//file.close();
+	endTime = chrono::high_resolution_clock::now();
 
+	file.close();
+}
+
+void FileTransfer::DisplayTransferSpeed()
+{
+	chrono::duration<double> duration = endTime - startTime;
+
+	double transferTimeSeconds = duration.count();
+
+	double transferSpeedMbps = (totalBytesTransferred * 8) / (transferTimeSeconds * 1024 * 1024);
+
+	cout << "Transfer Speed: " << transferSpeedMbps << " Mbps" << endl;
 }
